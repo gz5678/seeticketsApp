@@ -14,7 +14,7 @@ def chooseEvent():
     return render_template('chooseEvent.html', events=eventNames)
 
 
-@bp.route('/chooseProducts', methods=('GET', 'POST'))
+@bp.route('/chooseProducts')
 def chooseProducts():
     eventName = request.args.get('event')
     eventId = Events.query.filter_by(name=eventName).first().id
