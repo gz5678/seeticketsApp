@@ -1,7 +1,7 @@
 <!doctype html>
 <title>Fee Calculator</title>
 <section class="content">
-  <form method="get">
+  <form method="get" action="{{ url_for('calculators.chooseProducts') }}">
       <label for="event">Choose an event:</label>
       <select id="event" name="event">
           {% for event in events %}
