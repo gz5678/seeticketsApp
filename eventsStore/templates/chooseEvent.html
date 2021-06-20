@@ -2,8 +2,8 @@
 <title>Fee Calculator</title>
 <section class="content">
   <form method="get">
-      <label for="events">Choose an event:</label>
-      <select id="events" name="events">
+      <label for="event">Choose an event:</label>
+      <select id="event" name="event">
           {% for event in events %}
               <option value="{{ event }}}">{{ event }}}</option>
           {% endfor %}
