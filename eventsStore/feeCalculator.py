@@ -9,7 +9,7 @@ bp = Blueprint('calculators', __name__)
 
 @bp.route('/')
 def chooseEvent():
-    if request.method == 'POST':
+    if request.method == 'GET':
         eventName = request.form['event']
         eventId = Events.query.filter_by(name=eventName).first().id
         productIds = association_table.query.filter_by(event_id=eventId)
