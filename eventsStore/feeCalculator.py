@@ -6,7 +6,7 @@ from eventsStore.models import Events
 bp = Blueprint('calculators', __name__)
 
 @bp.route('/')
-def feeCalculator():
+def chooseEvent():
     events = Events.query.all()
     eventNames = [event.name for event in events]
     return render_template('chooseEvent.html', events=eventNames)
