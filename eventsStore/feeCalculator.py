@@ -1,12 +1,12 @@
 from flask import (
     Blueprint, render_template, request, redirect, url_for
 )
-from eventsStore.models import Events, Products
+from eventsStore.models import Events, Products, association_table
 
 bp = Blueprint('calculators', __name__)
 
 
-@bp.route('/', methods=('POST',))
+@bp.route('/')
 def chooseEvent():
     if request.method == 'POST':
         eventName = request.form['event']

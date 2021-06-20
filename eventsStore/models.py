@@ -14,7 +14,7 @@ class Events(db.Model):
     name = Column('name', String(50), unique=True)
     service_fee_amount = Column('service_fee_amount', Integer)
     service_fee_currency = Column('service_fee_currency', String)
-    children = relationship("Child",
+    children = relationship("Products",
                             secondary=association_table)
 
     def __init__(self, name=None, service_fee_amount=None, service_fee_currency=None):
