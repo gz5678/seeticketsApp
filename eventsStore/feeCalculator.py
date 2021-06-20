@@ -9,18 +9,18 @@ bp = Blueprint('calculators', __name__)
 
 @bp.route('/')
 def chooseEvent():
-    events = Events.query.all()
+    events = Events.query.with_entities(Events.name).all()
     eventNames = [event.name for event in events]
     return render_template('chooseEvent.html', events=eventNames)
 
 
 @bp.route('/chooseProducts')
 def chooseProducts():
+    #TODO: IF NO EVENT WAS GIVEN (PAGE WAS ACCESSED DIRECTLY) OR THE EVENT DOESN'T EXIST IN DATABSE, NEED TO RETURN TO CHOOSEEVENT PAGE
     eventName = request.args.get('event')
     eventId = Events.query.filter_by(name=eventName).first().id
     products = Products.query.join(association_table,
                                    association_table.c.product_id == Products.id).\
         filter(association_table.c.event_id == eventId)
-    # products = Products.query.filter(Products.id.in_(productIds)).all()
     productsNames = [product.name for product in products]
     return render_template('chooseProducts.html', products=productsNames)
