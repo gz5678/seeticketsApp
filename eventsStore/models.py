@@ -17,11 +17,6 @@ class Events(db.Model):
     children = relationship("Products",
                             secondary=association_table)
 
-    def __init__(self, name=None, service_fee_amount=None, service_fee_currency=None):
-        self.name = name
-        self.service_fee_amount = service_fee_amount
-        self.service_fee_currency = service_fee_currency
-
 
 class Products(db.Model):
     __tablename__ = 'products'
@@ -29,8 +24,3 @@ class Products(db.Model):
     name = Column('name', String(50))
     service_fee_amount = Column('service_fee_amount', Integer)
     service_fee_currency = Column('service_fee_currency', String)
-
-    def __init__(self, name=None, service_fee_amount=None, service_fee_currency=None):
-        self.name = name
-        self.service_fee_amount = service_fee_amount
-        self.service_fee_currency = service_fee_currency
