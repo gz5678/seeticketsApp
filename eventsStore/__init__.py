@@ -14,4 +14,8 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+    from . import feeCalculator
+    app.register_blueprint(feeCalculator.bp)
+    app.add_url_rule('/', endpoint='chooseEvent')
+
     return app
