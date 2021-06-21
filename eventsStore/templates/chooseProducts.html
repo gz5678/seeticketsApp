@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!doctype html>
+<title>Fee Calculator</title>
+<section class="content">
+  <form method="get">
+      <label for="event">Choose an event:</label>
+      <select id="event" name="event">
+          {% for product in products %}
+              <option value="{{ product }}">{{ product }}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Choose product for event">
+  </form>
+</section>
