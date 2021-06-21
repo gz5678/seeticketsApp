@@ -1,8 +1,11 @@
+import functools
+
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
 from eventsStore import db
 from eventsStore.models import Events, Products, association_table
+from sqlalchemy import func
 
 bp = Blueprint('calculators', __name__)
 
@@ -16,6 +19,10 @@ def chooseEvent():
 
 @bp.route('/chooseProducts')
 def chooseProducts():
+    def putEventFeeIfNoProductFee(eventFee, product):
+        if not product.service_fee_amount:
+            product.service_fee_amount = eventFee
+        return product
     error = None
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()
@@ -24,8 +31,6 @@ def chooseProducts():
         flash(error)
         return redirect(url_for('calculators.chooseEvent'))
     else:
-        products = Products.query.join(association_table,
-                                       association_table.c.product_id == Products.id).\
-            filter(association_table.c.event_id == event.id)
-        productsNames = [product.name for product in products]
-        return render_template('chooseProducts.html', products=productsNames)
+        determineFeeFunc = functools.partial(putEventFeeIfNoProductFee, event.service_fee_amount)
+        products = list(map(determineFeeFunc, event.children))
+        return render_template('chooseProducts.html', products=products)

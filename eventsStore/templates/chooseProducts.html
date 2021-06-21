@@ -11,15 +11,13 @@
         }
     }
   </script>
-  <form method="get">
-    {% for product in products %}
-      <div class="checkbox checkbox-info"></div>
-        <input type="checkbox" id="{{ product }}" name="{{ product }}" value="{{ product }}" onchange="showDiv(this)">
-        <label for="{{ product }}">{{ product }}</label><br>
-      </div>
-      <div id="{{ product }}_quantity">
+  {% for product in products %}
+    <div class="checkbox checkbox-info"></div>
+      <input type="checkbox" id="{{ product.name }}" name="{{ product.name }}" value="{{ product.name }}" onchange="showDiv(this)">
+      <label for="{{ product.name }}">{{ product.name }}</label><br>
+    </div>
+    <div id="{{ product.name }}_quantity">
 
-      </div>
-    {% endfor %}
-  </form>
+    </div>
+  {% endfor %}
 </section>
