@@ -2,22 +2,38 @@
 <title>Fee Calculator</title>
 <section class="content">
   <script>
+    function updateHidden(obj) {
+      productName = obj.id.split('_').slice(0, -1).join('_');
+      if (/^\d+$/.test(obj.value)) {
+          document.getElementById(productName + "_sum").value = parseInt(obj.value) * parseInt(document.getElementById(productName).value);
+      }
+      else {
+          document.getElementById(productName + "_sum").value = 0;
+          obj.value = "0";
+      }
+    }
     function showDiv(obj) {
         if (obj.checked) {
-            document.getElementById(obj.id + "_quantity").innerHTML = '<label for="${obj.id}_text_box">Quantity</label><input type="text" id="${obj.id}_text_box"/>';
+            document.getElementById(obj.id + "_quantity").style.display = "block";
+            document.getElementById(obj.id + "_sum").setAttribute("name", obj.id)
         }
         else {
-            document.getElementById(obj.id + "_quantity").innerHTML = '';
+            document.getElementById(obj.id + "_quantity").style.display = "none";
+            document.getElementById(obj.id + "_sum").removeAttribute("name")
         }
     }
   </script>
-  {% for product in products %}
-    <div class="checkbox checkbox-info"></div>
-      <input type="checkbox" id="{{ product.name }}" name="{{ product.name }}" value="{{ product.name }}" onchange="showDiv(this)">
-      <label for="{{ product.name }}">{{ product.name }}</label><br>
-    </div>
-    <div id="{{ product.name }}_quantity">
-
-    </div>
-  {% endfor %}
+  <form method="get">
+    {% for product in products %}
+      <div class="checkbox checkbox-info"></div>
+        <input type="checkbox" id="{{ product.name }}" value="{{ product.service_fee_amount }}" onchange="showDiv(this)">
+        <label for="{{ product.name }}">{{ product.name }}</label><br>
+      </div>
+      <div id="{{ product.name }}_quantity" style="display: none">
+        <label for="{{ product.name }}_textbox">Quantity: </label><input type="text" value="0" id="{{ product.name }}_textbox" onchange="updateHidden(this)">
+        <input type="hidden" value="0" id="{{ product.name }}_sum">
+      </div>
+    {% endfor %}
+    <input type="submit" value="Calculate Fee">
+  </form>
 </section>

@@ -17,12 +17,14 @@ def chooseEvent():
     return render_template('chooseEvent.html', events=eventNames)
 
 
-@bp.route('/chooseProducts')
+@bp.route('/chooseProducts', methods=('GET', 'POST'))
 def chooseProducts():
     def putEventFeeIfNoProductFee(eventFee, product):
         if not product.service_fee_amount:
             product.service_fee_amount = eventFee
         return product
+    if request.method == 'POST':
+        sumFee = sum(request.values)
     error = None
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()
@@ -33,4 +35,4 @@ def chooseProducts():
     else:
         determineFeeFunc = functools.partial(putEventFeeIfNoProductFee, event.service_fee_amount)
         products = list(map(determineFeeFunc, event.children))
-        return render_template('chooseProducts.html', products=products)
+        return render_template('chooseProducts.html', products=products, event=event)
