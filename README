@@ -2,3 +2,18 @@ An exercise for interview at seetickets.
 A small program which gets data about events and products from a database and calculates the service fee
 for buying a certain quantity of products for the event.
 DB is sqlite and program is built in flask + sqlalchemy.
+
+Improvements
+=============
+
+1. Add to the association table a service fee column where the value is the products service fee if it is not null
+and otherwise is the event service fee.
+
+
+Explanations
+=============
+1. At first I used the children attribute of the event to get the relevant products. In order to determine the
+service fee, I iterated over the products and changed the service fee to the event's service fee if the value
+was null. This seemed inefficient to me since it already implicitly queries the database, so it's better to define
+the right service fee in query itself. That's why I moved to the join query with coalesce. I might be wrong of course
+:)
