@@ -1,0 +1,4 @@
+An exercise for interview at seetickets.
+A small program which gets data about events and products from a database and calculates the service fee
+for buying a certain quantity of products for the event.
+DB is sqlite and program is built in flask + sqlalchemy.
