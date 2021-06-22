@@ -24,7 +24,15 @@ def chooseProducts():
             product.service_fee_amount = eventFee
         return product
     if request.method == 'POST':
-        sumFee = sum(request.values)
+        print(request.form)
+        message = "No items were chosen"
+        currency = request.form.get('currency')
+        if len(request.form) > 1:
+            sumFee = 0
+            for key in request.form:
+                sumFee = sumFee + int(request.form.get(key)) if key != 'currency' else sumFee
+            message = f"The fee is {sumFee} {currency}"
+        return render_template('showFeeSum.html', message=message)
     error = None
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()

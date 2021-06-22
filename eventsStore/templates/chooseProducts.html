@@ -23,7 +23,7 @@
         }
     }
   </script>
-  <form method="get">
+  <form method="post">
     {% for product in products %}
       <div class="checkbox checkbox-info"></div>
         <input type="checkbox" id="{{ product.name }}" value="{{ product.service_fee_amount }}" onchange="showDiv(this)">
@@ -34,6 +34,7 @@
         <input type="hidden" value="0" id="{{ product.name }}_sum">
       </div>
     {% endfor %}
+    <input type="hidden" value="{{ event.service_fee_currency }}" id="currency" name="currency">
     <input type="submit" value="Calculate Fee">
   </form>
 </section>
