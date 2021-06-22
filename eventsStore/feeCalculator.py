@@ -18,7 +18,6 @@ def chooseEvent():
 @bp.route('/chooseProducts', methods=('GET', 'POST'))
 def chooseProducts():
     if request.method == 'POST':
-        print(request.form)
         message = "No items were chosen"
         currency = request.form.get('currency')
         if len(request.form) > 1:
@@ -43,5 +42,4 @@ def chooseProducts():
                                                     event.service_fee_amount, 0).label("service_fee_amount"))\
             .join(association_table, association_table.c.product_id == Products.id)\
             .filter(association_table.c.event_id == event.id)
-        print(list(products))
         return render_template('chooseProducts.html', products=products, event=event)
