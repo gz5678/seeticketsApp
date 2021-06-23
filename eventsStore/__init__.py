@@ -7,9 +7,9 @@ db = SQLAlchemy()
 def create_app(test_config=None):
     app = Flask(__name__)
     if not test_config:
-        app.config.from_pyfile("../config.py")
+        app.config.from_pyfile(os.path.join("..", "config.py"))
     else:
-        app.config.from_mapping(test_config)
+        app.config.from_pyfile(os.path.join("..", test_config))
 
     db.init_app(app)
     from eventsStore.models import Products, Events, association_table
