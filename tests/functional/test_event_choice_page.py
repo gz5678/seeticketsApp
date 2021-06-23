@@ -1,5 +1,4 @@
 from eventsStore.feeCalculator import NO_EVENT_ERROR_MESSAGE, NO_EVENTS_IN_DATABASE_MESSAGE
-from eventsStore.models import Events
 
 
 def test_all_events_appear(test_client, init_database):

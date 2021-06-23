@@ -37,7 +37,8 @@
         <label for="{{ product.name }}">{{ product.name }}</label><br>
       </div>
       <div id="{{ product.name }}_quantity" style="display: none">
-        <label for="{{ product.name }}_textbox">Quantity: </label><input type="text" value="1" id="{{ product.name }}_textbox" onchange="updateHidden(this)">
+        <label for="{{ product.name }}_textbox">Quantity: </label>
+        <input type="text" value="1" id="{{ product.name }}_textbox" onchange="updateHidden(this)">
         <input type="hidden" value="{{ product.service_fee_amount }}" id="{{ product.name }}_sum">
       </div>
     {% endfor %}
