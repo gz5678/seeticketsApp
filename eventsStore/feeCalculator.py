@@ -8,6 +8,7 @@ from eventsStore.models import Events
 
 bp = Blueprint('calculators', __name__)
 
+NO_EVENT_ERROR_MESSAGE = "No event was given or event doesn't exist"
 
 @bp.route('/')
 def chooseEvent():
@@ -35,8 +36,7 @@ def chooseProducts():
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()
     if not event:
-        error = "No event was given or event doesn't exist"
-        flash(error)
+        flash(NO_EVENT_ERROR_MESSAGE)
         return redirect(url_for('calculators.chooseEvent'))
     else:
         determineFeeFunc = functools.partial(putEventFeeIfNoProductFee, event.service_fee_amount)
