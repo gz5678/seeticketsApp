@@ -1,4 +1,3 @@
-import sqlalchemy
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
@@ -13,6 +12,7 @@ NO_EVENTS_IN_DATABASE_MESSAGE = "Sorry no events are currently available"
 def chooseEvent():
     events = Events.query.with_entities(Events.name).all()
     eventNames = [event.name for event in events]
+    # No events in database
     if len(eventNames) == 0:
         flash(NO_EVENTS_IN_DATABASE_MESSAGE)
     return render_template('chooseEvent.html', events=eventNames)
@@ -20,11 +20,11 @@ def chooseEvent():
 
 @bp.route('/chooseProducts', methods=('GET', 'POST'))
 def chooseProducts():
-
     if request.method == 'POST':
         message = "No items were chosen"
         currency = request.form.get('currency')
         event_service_fee = int(request.form.get('event_service_fee'))
+        # We always send currency and event service fee
         if len(request.form) > 2:
             idsList = [key for key in request.form if key not in ['currency', 'event_service_fee']]
             productList = Products.query.filter(Products.id.in_(idsList)).all()
@@ -38,6 +38,7 @@ def chooseProducts():
 
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()
+    # Could not find event. Redirecting to same page + error message
     if not event:
         flash(NO_EVENT_ERROR_MESSAGE)
         return redirect(url_for('calculators.chooseEvent'))

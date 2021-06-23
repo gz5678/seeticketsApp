@@ -4,6 +4,7 @@ from eventsStore import db
 
 DEFAULT_CURRENCY = "EURO"
 
+
 class Events(db.Model):
     __tablename__ = 'events'
     id = Column('id', Integer, primary_key=True, autoincrement=True)
