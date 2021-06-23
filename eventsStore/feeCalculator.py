@@ -2,7 +2,7 @@ import functools
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
-from eventsStore.models import Events
+from eventsStore.models import Events, Products
 
 bp = Blueprint('calculators', __name__)
 
@@ -20,25 +20,26 @@ def chooseEvent():
 
 @bp.route('/chooseProducts', methods=('GET', 'POST'))
 def chooseProducts():
-    def putEventFeeIfNoProductFee(eventFee, product):
-        if not product.service_fee_amount:
-            product.service_fee_amount = eventFee
-        return product
+
     if request.method == 'POST':
         message = "No items were chosen"
         currency = request.form.get('currency')
-        if len(request.form) > 1:
+        event_service_fee = int(request.form.get('event_service_fee'))
+        if len(request.form) > 2:
+            idsList = [key for key in request.form if key not in ['currency', 'event_service_fee']]
+            productList = Products.query.filter(Products.id.in_(idsList)).all()
             sumFee = 0
-            for key in request.form:
-                sumFee = sumFee + int(request.form.get(key)) if key != 'currency' else sumFee
+            for product in productList:
+                fee = product.service_fee_amount or event_service_fee
+                sumFee += int(request.form.get(str(product.id))) * int(fee)
             message = f"The fee is {sumFee} {currency}"
         return render_template('showFeeSum.html', message=message)
+
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()
     if not event:
         flash(NO_EVENT_ERROR_MESSAGE)
         return redirect(url_for('calculators.chooseEvent'))
     else:
-        determineFeeFunc = functools.partial(putEventFeeIfNoProductFee, event.service_fee_amount)
-        products = list(map(determineFeeFunc, event.products))
+        products = list(event.products)
         return render_template('chooseProducts.html', products=products, event=event)

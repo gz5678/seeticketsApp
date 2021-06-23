@@ -13,7 +13,7 @@ def test_fee_is_calculated_correctly(test_client, init_database):
 
     response = test_client.post(
         '/chooseProducts',
-        data={"VIP": 30, "Weekend": 15},
+        data={"1": 2, "2": 3, "currency": "USD", "event_service_fee": 5},
         follow_redirects=True
     )
-    assert b'45' in response.data
+    assert b'45 USD' in response.data
