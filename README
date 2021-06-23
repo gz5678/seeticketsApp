@@ -3,17 +3,32 @@ A small program which gets data about events and products from a database and ca
 for buying a certain quantity of products for the event.
 DB is sqlite and program is built in flask + sqlalchemy.
 
-Improvements
-=============
-
-1. Add to the association table a service fee column where the value is the products service fee if it is not null
-and otherwise is the event service fee.
-
 
 Explanations
 =============
-1. At first I used the children attribute of the event to get the relevant products. In order to determine the
-service fee, I iterated over the products and changed the service fee to the event's service fee if the value
-was null. This seemed inefficient to me since it already implicitly queries the database, so it's better to define
-the right service fee in query itself. That's why I moved to the join query with coalesce. I might be wrong of course
-:)
+1. At first I used a many to many relationship since I though of the products as a "bag of products" that can map
+to several events. But after thinking about it, that doesn't really make sense in this context where each event
+is different (It's more suited for general stores which can have the same items). So I switched to a one to many
+relationship between events and products.
+
+2. During most of the project I though that the best way to handle the flow is to minimize the number of calls to
+the database. In this mindset, I didn't want to search for the products again when posting the form, so I did all
+the calculations in the Javascript. But this was problematic in a couple of ways:
+    a. It's harder to test when the code is not in the view and in python.
+    b. It lets the front end deal with saving data inside tags which is not its purpose. The responsibility of the
+       javascript is just for interacting with the user, not managing the calculations (In my opinion).
+    c. In this context, I though that the number of products we end up looking for is small and therefore the overhead
+       is negligible.
+So I decided to remove the calculation from the javascript and move it to the view. The javascript only send the
+products chosen and the quantity. This does cost us another db lookup.
+
+
+Improvements
+=============
+
+1. More in depth tests
+2. Maybe adding a separate view for the calculation: Have the chooseProduct view send it the product ids and
+quantity and it will handle the calculation.
+3. Maybe have the database figure out what to do with null product service fee - When such a product in inserted,
+have the database automatically change its service fee to it's parent (event) service fee. Then we can remove these
+checks and flows from the code.
