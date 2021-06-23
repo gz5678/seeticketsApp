@@ -8,12 +8,15 @@ from eventsStore.models import Events
 
 bp = Blueprint('calculators', __name__)
 
-NO_EVENT_ERROR_MESSAGE = "No event was given or event doesn't exist"
+NO_EVENT_ERROR_MESSAGE = "No event was given or event doesnt exist"
+NO_EVENTS_IN_DATABASE_MESSAGE = "Sorry no events are currently available"
 
 @bp.route('/')
 def chooseEvent():
     events = Events.query.with_entities(Events.name).all()
     eventNames = [event.name for event in events]
+    if len(eventNames) == 0:
+        flash(NO_EVENTS_IN_DATABASE_MESSAGE)
     return render_template('chooseEvent.html', events=eventNames)
 
 
