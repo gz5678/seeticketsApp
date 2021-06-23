@@ -1,9 +1,7 @@
-import sqlalchemy
 import functools
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
-from eventsStore import db
 from eventsStore.models import Events
 
 bp = Blueprint('calculators', __name__)
@@ -35,7 +33,6 @@ def chooseProducts():
                 sumFee = sumFee + int(request.form.get(key)) if key != 'currency' else sumFee
             message = f"The fee is {sumFee} {currency}"
         return render_template('showFeeSum.html', message=message)
-    error = None
     eventName = request.args.get('event')
     event = Events.query.filter_by(name=eventName).first()
     if not event:
