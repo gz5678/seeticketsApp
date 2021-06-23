@@ -4,6 +4,14 @@ from eventsStore.models import Events, Products
 
 
 @pytest.fixture(scope='module')
+def test_db():
+    app = create_app(test_config='test_config.py')
+    with app.app_context():
+        yield db
+        db.drop_all()
+
+
+@pytest.fixture(scope='module')
 def test_client():
     app = create_app(test_config='test_config.py')
 
