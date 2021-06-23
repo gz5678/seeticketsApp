@@ -14,9 +14,19 @@ def test_client():
 
 @pytest.fixture(scope='module')
 def init_database(test_client):
-    event1 = Events(name="Tomorrowland", service_fee_amount=5, service_fee_currency="ILS")
+    event1 = Events(name="Tomorrowland", service_fee_amount=5, service_fee_currency="USD")
     event2 = Events(name="Glastonbury", service_fee_amount=10, service_fee_currency="GBP")
     event3 = Events(name="Coachella", service_fee_amount=15, service_fee_currency="USD")
+
+    product1 = Products(name="VIP", service_fee_amount=15, service_fee_currency="USD")
+    product2 = Products(name="Weekend", service_fee_amount=5, service_fee_currency="USD")
+    product3 = Products(name="VIP", service_fee_currency="GBP")
+    product4 = Products(name="Day", service_fee_currency="USD")
+    product5 = Products(name="Weekend", service_fee_amount=15, service_fee_currency="GBP")
+
+    event1.children.extend([product1, product2])
+    event2.children.extend([product3, product5])
+    event3.children.extend([product4, product2])
 
     db.session.add(event1)
     db.session.add(event2)
