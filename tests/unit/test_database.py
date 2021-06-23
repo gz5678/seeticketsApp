@@ -1,4 +1,4 @@
-from eventsStore.models import Events, Products
+from eventsStore.models import Events, Products, DEFAULT_CURRENCY
 
 
 def test_deleting_event_deletes_the_related_products(test_db):
@@ -14,3 +14,12 @@ def test_deleting_event_deletes_the_related_products(test_db):
     test_db.session.commit()
     assert len(Events.query.all()) == 0
     assert len(Products.query.all()) == 0
+
+
+def test_default_euro_currency_for_event(test_db):
+    event1 = Events(name="Tomorrowland", service_fee_amount=5)
+    test_db.session.add(event1)
+    test_db.session.commit()
+
+    event = Events.query.all()[-1]
+    assert event.service_fee_currency == DEFAULT_CURRENCY
