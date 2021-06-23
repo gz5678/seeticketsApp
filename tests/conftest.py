@@ -24,9 +24,9 @@ def init_database(test_client):
     product4 = Products(name="Day", service_fee_currency="USD")
     product5 = Products(name="Weekend", service_fee_amount=15, service_fee_currency="GBP")
 
-    event1.children.extend([product1, product2])
-    event2.children.extend([product3, product5])
-    event3.children.extend([product4, product2])
+    event1.products.extend([product1, product2])
+    event2.products.extend([product3, product5])
+    event3.products.extend([product4, product2])
 
     db.session.add(event1)
     db.session.add(event2)

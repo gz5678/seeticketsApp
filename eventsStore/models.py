@@ -14,7 +14,7 @@ class Events(db.Model):
     name = Column('name', String(50), unique=True)
     service_fee_amount = Column('service_fee_amount', Integer)
     service_fee_currency = Column('service_fee_currency', String)
-    children = relationship("Products",
+    products = relationship("Products",
                             secondary=association_table)
 
 
