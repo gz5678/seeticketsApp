@@ -47,7 +47,7 @@ def chooseProducts():
 
 
 def _calculate_service_fee(event_service_fee, product_service_fee, quantity):
-    if product_service_fee:
+    if product_service_fee or product_service_fee == 0:
         fee = product_service_fee
     else:
         fee = event_service_fee
