@@ -1,4 +1,5 @@
 import sqlalchemy
+import functools
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
@@ -17,6 +18,10 @@ def chooseEvent():
 
 @bp.route('/chooseProducts', methods=('GET', 'POST'))
 def chooseProducts():
+    def putEventFeeIfNoProductFee(eventFee, product):
+        if not product.service_fee_amount:
+            product.service_fee_amount = eventFee
+        return product
     if request.method == 'POST':
         message = "No items were chosen"
         currency = request.form.get('currency')
@@ -34,12 +39,6 @@ def chooseProducts():
         flash(error)
         return redirect(url_for('calculators.chooseEvent'))
     else:
-        products = Products.query\
-            .with_entities(Products.id,
-                           Products.name,
-                           Products.service_fee_currency,
-                           sqlalchemy.func.coalesce(Products.service_fee_amount,
-                                                    event.service_fee_amount, 0).label("service_fee_amount"))\
-            .join(association_table, association_table.c.product_id == Products.id)\
-            .filter(association_table.c.event_id == event.id)
+        determineFeeFunc = functools.partial(putEventFeeIfNoProductFee, event.service_fee_amount)
+        products = list(map(determineFeeFunc, event.products))
         return render_template('chooseProducts.html', products=products, event=event)
