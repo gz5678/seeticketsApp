@@ -1,4 +1,4 @@
-import functools
+import sqlalchemy
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
@@ -30,8 +30,9 @@ def chooseProducts():
             productList = Products.query.filter(Products.id.in_(idsList)).all()
             sumFee = 0
             for product in productList:
-                fee = product.service_fee_amount or event_service_fee
-                sumFee += int(request.form.get(str(product.id))) * int(fee)
+                sumFee += _calculate_service_fee(event_service_fee,
+                                                 product.service_fee_amount,
+                                                 int(request.form.get(str(product.id))))
             message = f"The fee is {sumFee} {currency}"
         return render_template('showFeeSum.html', message=message)
 
@@ -43,3 +44,11 @@ def chooseProducts():
     else:
         products = list(event.products)
         return render_template('chooseProducts.html', products=products, event=event)
+
+
+def _calculate_service_fee(event_service_fee, product_service_fee, quantity):
+    if product_service_fee:
+        fee = product_service_fee
+    else:
+        fee = event_service_fee
+    return fee * quantity
