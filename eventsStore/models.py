@@ -8,7 +8,7 @@ class Events(db.Model):
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     name = Column('name', String(50), unique=True)
     service_fee_amount = Column('service_fee_amount', Integer)
-    service_fee_currency = Column('service_fee_currency', String)
+    service_fee_currency = Column('service_fee_currency', String, default="EURO")
     products = relationship("Products",
                             back_populates='event',
                             cascade='delete')
