@@ -4,9 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.from_pyfile("../config.py")
+    if not test_config:
+        app.config.from_pyfile("../config.py")
+    else:
+        app.config.from_mapping(test_config)
 
     db.init_app(app)
     from eventsStore.models import Products, Events, association_table
