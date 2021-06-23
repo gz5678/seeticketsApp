@@ -12,7 +12,7 @@ def create_app(test_config=None):
         app.config.from_pyfile(os.path.join("..", test_config))
 
     db.init_app(app)
-    from eventsStore.models import Products, Events, association_table
+    from eventsStore.models import Products, Events
 
     with app.app_context():
         db.create_all()

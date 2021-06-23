@@ -1,11 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from eventsStore import db
-
-
-association_table = Table('association', db.Model.metadata,
-                          Column('event_id', Integer, ForeignKey("events.id")),
-                          Column('product_id', Integer, ForeignKey("products.id")))
 
 
 class Events(db.Model):
@@ -15,7 +10,8 @@ class Events(db.Model):
     service_fee_amount = Column('service_fee_amount', Integer)
     service_fee_currency = Column('service_fee_currency', String)
     products = relationship("Products",
-                            secondary=association_table)
+                            back_populates='event',
+                            cascade='delete')
 
 
 class Products(db.Model):
@@ -24,3 +20,6 @@ class Products(db.Model):
     name = Column('name', String(50))
     service_fee_amount = Column('service_fee_amount', Integer)
     service_fee_currency = Column('service_fee_currency', String)
+    event_id = Column(Integer, ForeignKey('events.id'))
+    event = relationship("Events",
+                         back_populates='products')

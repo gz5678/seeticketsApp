@@ -4,7 +4,7 @@ from flask import (
     Blueprint, render_template, request, redirect, url_for, flash
 )
 from eventsStore import db
-from eventsStore.models import Events, Products, association_table
+from eventsStore.models import Events
 
 bp = Blueprint('calculators', __name__)
 

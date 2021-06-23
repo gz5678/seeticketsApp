@@ -3,7 +3,7 @@ from eventsStore import create_app, db
 from eventsStore.models import Events, Products
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def test_db():
     app = create_app(test_config='test_config.py')
     with app.app_context():
@@ -29,12 +29,13 @@ def init_database(test_client):
     product1 = Products(name="VIP", service_fee_amount=15, service_fee_currency="USD")
     product2 = Products(name="Weekend", service_fee_amount=5, service_fee_currency="USD")
     product3 = Products(name="VIP", service_fee_currency="GBP")
-    product4 = Products(name="Day", service_fee_currency="USD")
-    product5 = Products(name="Weekend", service_fee_amount=15, service_fee_currency="GBP")
+    product4 = Products(name="Weekend", service_fee_amount=15, service_fee_currency="GBP")
+    product5 = Products(name="Day", service_fee_currency="USD")
+    product6 = Products(name="Weekend", service_fee_amount=5, service_fee_currency="USD")
 
     event1.products.extend([product1, product2])
-    event2.products.extend([product3, product5])
-    event3.products.extend([product4, product2])
+    event2.products.extend([product3, product4])
+    event3.products.extend([product5, product6])
 
     db.session.add(event1)
     db.session.add(event2)
