@@ -5,6 +5,11 @@ db = SQLAlchemy()
 
 
 def create_app(test_config=None):
+    """
+    App factory for the flask app
+    :param test_config: A config we can inject for testing
+    :return: The flask app
+    """
     app = Flask(__name__)
     if not test_config:
         app.config.from_pyfile(os.path.join("..", "config.py"))

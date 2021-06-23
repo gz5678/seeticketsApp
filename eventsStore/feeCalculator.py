@@ -10,6 +10,10 @@ NO_EVENTS_IN_DATABASE_MESSAGE = "Sorry no events are currently available"
 
 @bp.route('/')
 def chooseEvent():
+    """
+    Choose event view which lets the user choose which event to calculate the fee for
+    :return: Renders the chooseEvent template
+    """
     events = Events.query.with_entities(Events.name).all()
     eventNames = [event.name for event in events]
     # No events in database
@@ -20,6 +24,10 @@ def chooseEvent():
 
 @bp.route('/chooseProducts', methods=('GET', 'POST'))
 def chooseProducts():
+    """
+    A view which lets the user pick the quantity of products he/she wants for the event and calculates the fee
+    :return: For GET the chooseProducts template with the relevant products and for POST the total fee
+    """
     if request.method == 'POST':
         message = "No items were chosen"
         currency = request.form.get('currency')
@@ -48,6 +56,14 @@ def chooseProducts():
 
 
 def _calculate_service_fee(event_service_fee, product_service_fee, quantity):
+    """
+    Calculates the service fee given the event service fee, product service fee and the quantity of the product
+    :param event_service_fee: The event service fee
+    :param product_service_fee: The product service fee
+    :param quantity: The quantity of the product the user want to buy
+    :return: The calculated fee for that product quantity
+    """
+    # We want to allow 0 service fee
     if product_service_fee or product_service_fee == 0:
         fee = product_service_fee
     else:

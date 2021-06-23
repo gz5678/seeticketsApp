@@ -2,9 +2,16 @@
 <title>Fee Calculator</title>
 <section class="content">
   <script>
-    function updateQuantity(obj) {
+
+  /**
+   * Check that the quantity entered by the user is valid
+   * @param obj - The textbox for the quantity
+   */
+  function updateQuantity(obj) {
       productName = obj.id.split('_').slice(0, -1).join('_');
+      // Check if the quantity is a positive integer
       if (/^\d+$/.test(obj.value)) {
+          // Check if the quantity is not zero
           if (parseInt(obj.value) === 0) {
               alert("Can't have 0 quantity")
               let checkbox = document.getElementById(productName)
@@ -17,6 +24,11 @@
           obj.value = "1";
       }
     }
+
+    /**
+     * Show the quantity div when the product is checked
+     * @param obj - The input tag object for the object
+     */
     function showDiv(obj) {
         if (obj.checked) {
             document.getElementById(obj.id + "_quantity").style.display = "block";
