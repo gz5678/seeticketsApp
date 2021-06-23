@@ -12,7 +12,8 @@ def test_client():
             yield testing_client
 
 
-def _init_db_for_test(test_client):
+@pytest.fixture(scope='module')
+def init_database(test_client):
     event1 = Events(name="Tomorrowland", service_fee_amount=5, service_fee_currency="ILS")
     event2 = Events(name="Glastonbury", service_fee_amount=10, service_fee_currency="GBP")
     event3 = Events(name="Coachella", service_fee_amount=15, service_fee_currency="USD")
